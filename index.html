@@ -24,6 +24,15 @@
 		<script src="assets/js/angular.js"></script>
 		<script src="assets/js/angular-route.js"></script>
 		<script src="assets/js/app.js"></script>
+		<script>
+			(function(){
+				var redirect = sessionStorage.redirect;
+				delete sessionStorage.redirect;
+				if (redirect && redirect != location.href) {
+					history.replaceState(null, null, redirect);
+				}
+			})();
+		</script>
 		<!--<base href="/">-->
 	</head>
 	<body ng-controller="mainController" ng-class="selectClass()">
