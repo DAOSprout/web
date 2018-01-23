@@ -14,24 +14,25 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     }]);
 
 // controllers
-app.controller('mainController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-    $scope.currentPage = 'index';
+app.controller('mainController', ['$scope', '$http', '$location', '$localStorage', function ($scope, $http, $location, $localStore) {
     $scope.currentPath = $location.path();
     $scope.selectClass = function (){
-        if($location.path() === '/') {
+        //if($location.path() === '/') {
+        if($localStore.currentPage === '' || $localStore.currentPage === 'index') {
             return "index";
         } else {
             return "no-sidebar";
         }
     };
     $scope.nextPage = function($page) {
-        $scope.currentPage = $page;
+        $localStore.currentPage = $page;
         $location.reload();
     };
     $scope.isHome = function(){
-        return $location.path() === '/';
+        //return $location.path() === '/';
+        return $localStore.currentPage === '' || $localStore.currentPage === 'index';
     };
     $scope.showPage = function($page) {
-        return $scope.currentPage === $page;
+        return $localStore.currentPage === $page;
     }
 }]);
