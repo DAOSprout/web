@@ -17,22 +17,13 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 app.controller('mainController', ['$scope', '$http', '$location', '$localStorage', function ($scope, $http, $location, $localStore) {
     $scope.currentPath = $location.path();
     $scope.selectClass = function (){
-        //if($location.path() === '/') {
-        if($localStore.currentPage === '' || $localStore.currentPage === 'index') {
+        if($location.path() === '/') {
             return "index";
         } else {
             return "no-sidebar";
         }
     };
-    $scope.nextPage = function($page) {
-        $localStore.currentPage = $page;
-        $location.reload();
-    };
     $scope.isHome = function(){
-        //return $location.path() === '/';
-        return $localStore.currentPage === '' || $localStore.currentPage === 'index';
+        return $location.path() === '/';
     };
-    $scope.showPage = function($page) {
-        return $localStore.currentPage === $page;
-    }
 }]);
