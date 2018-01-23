@@ -1,52 +1,90 @@
 <!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+<html ng-app="DS">
 	<head>
-		<title>Aerial by HTML5 UP</title>
-		<meta charset="utf-8" />
+		<title>DAOSprout</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="Seed Funding | Token-Curated List | Disruptive Community" />
+		<meta name="keywords" content="dao ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/png" href="images/daosprout-icon.png" />
+		<link rel="shortcut icon" href="images/daosprout-icon.png" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.dropotron.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/jquery.scrollgress.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/angular.js"></script>
+		<script src="assets/js/angular-route.js"></script>
+		<script src="assets/js/app.js"></script>
+		<base href="/web/">
 	</head>
-	<body class="loading">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
+	<body ng-controller="mainController" ng-class="selectClass()">
+		<div id="page-wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Adam Jensen</h1>
-						<p>Security Chief &nbsp;&bull;&nbsp; Cyborg &nbsp;&bull;&nbsp; Never asked for this</p>
-						<nav>
-							<ul>
-								<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
-								<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
-								<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-							</ul>
-						</nav>
+			<!-- Header -->
+			<header id="header" class="alt">
+				<nav id="nav">
+					<ul>
+						<li ng-show="!isHome()"><a href="#" class="button special">Log Out</a></li>
+					</ul>
+				</nav>
+			</header>
+
+			<!-- Banner -->
+			<section id="banner" ng-show="isHome()">
+
+				<div class="inner">
+
+					<header>
+						<h2>DAOSPROUT</h2>
 					</header>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>.</span>
+					<p>Seed Funding | Token-Curated List | Disruptive Community</p>
+
+					<footer>
+
+						<section class="wrapper style1 special container 75%">
+
+							<!-- Content -->
+							<div class="content">
+								<form>
+									<div class="row 50%">
+										<div class="6u 12u(mobile)">
+											<input type="text" name="email" placeholder="Email" />
+										</div>
+										<div class="6u 12u(mobile)">
+											<input type="password" name="password" placeholder="Password" />
+										</div>
+									</div>
+									<div class="row 50%">
+										<div class="12u">
+											<ul class="buttons">
+												<li><input type="submit" value="Enter" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</div>
+
+						</section>
+
 					</footer>
 
-			</div>
+				</div>
+
+			</section>
+
+			<div ng-view autoscroll="true"></div>
+
 		</div>
-		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-		<script>
-			window.onload = function() { document.body.className = ''; }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
+
 	</body>
 </html>
