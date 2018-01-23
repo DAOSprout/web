@@ -8,8 +8,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.html5Mode(true);
     //$locationProvider.hashPrefix('!');
     $routeProvider.
-            when('/wallet',{templateUrl: 'fragments/wallet.html', controller: 'mainController' }).
-            when('/register',{templateUrl: 'fragments/register.html', controller: 'mainController' }).
+            when('wallet',{templateUrl: 'fragments/wallet.html', controller: 'mainController' }).
+            when('register',{templateUrl: 'fragments/register.html', controller: 'mainController' }).
             otherwise({redirectTo: '/'})
     }]);
 
