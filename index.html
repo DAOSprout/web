@@ -23,15 +23,6 @@
 		<script src="assets/js/main.js"></script>
 		<script src="assets/js/angular.js"></script>
 		<script src="assets/js/angular-route.js"></script>
-		<script>
-			(function(){
-				var redirect = sessionStorage.redirect;
-				delete sessionStorage.redirect;
-				if (redirect && redirect != location.href) {
-					history.replaceState(null, null, redirect);
-				}
-			})();
-		</script>
 		<script src="assets/js/app.js"></script>
 		<!--<base href="/">-->
 	</head>
@@ -67,15 +58,13 @@
 
 							<!-- Content -->
 							<div class="content">
-								<form action="wallet">
-									<div class="row 50%">
-										<div class="12u">
-											<ul class="buttons">
-												<li><input type="submit" value="Authenticate" /></li>
-											</ul>
-										</div>
+								<div class="row 50%">
+									<div class="12u">
+										<ul>
+											<li><a onclick="nextPage('wallet');" class="button">Authenticate</a></li>
+										</ul>
 									</div>
-								</form>
+								</div>
 							</div>
 
 						</section>
@@ -86,7 +75,8 @@
 
 			</section>
 
-			<div ng-view autoscroll="true"></div>
+			<!--<div ng-view autoscroll="true"></div>-->
+			<div ng-show="showPage('wallet')" ng-include="fragments/wallet.html"></div>
 
 		</div>
 

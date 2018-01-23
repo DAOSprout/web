@@ -15,6 +15,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 // controllers
 app.controller('mainController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    $scope.currentPage = 'index';
     $scope.currentPath = $location.path();
     $scope.selectClass = function (){
         if($location.path() === '/') {
@@ -23,7 +24,14 @@ app.controller('mainController', ['$scope', '$http', '$location', function ($sco
             return "no-sidebar";
         }
     };
+    $scope.nextPage = function($page) {
+        $scope.currentPage = $page;
+        $location.reload();
+    };
     $scope.isHome = function(){
         return $location.path() === '/';
     };
+    $scope.showPage = function($page) {
+        return $scope.currentPage === $page;
+    }
 }]);
