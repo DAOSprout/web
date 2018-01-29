@@ -359,7 +359,8 @@
 		{
 			display: inline-block;
 			border-radius: 0.35em;
-			box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.25);
+			/*box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.25);*/
+			box-shadow: inset 0px 0px 1px 1px rgba(50, 59, 78, 0.25);
 			padding: 0 1.5em 0 1.5em;
 		}
 
@@ -375,9 +376,9 @@
 			{
 				display: block;
 				/*color: #eee;*/
-				color: #5e921d;
+				color: #222835;
 				/*color: rgba(255,255,255,0.75);*/
-				color: rgba(94,146,29,0.75);
+				color: rgba(22, 28, 35, 0.75);
 				text-transform: uppercase;
 				text-decoration: none;
 				font-size: 0.7em;
@@ -389,6 +390,7 @@
 				-o-transition: all .25s ease-in-out;
 				-ms-transition: all .25s ease-in-out;
 				transition: all .25s ease-in-out;
+				font-weight: bold;
 				outline: 0;
 			}
 
@@ -396,7 +398,7 @@
 				{
 					padding: 0 .5em 0 .5em;
 					/*color: #eee;*/
-					color: #5e921d;
+					color: #222835;
 				}
 			
 			#nav > ul > li:hover > a,
@@ -405,7 +407,7 @@
 			#nav > ul > li.active > span
 			{
 				/*color: #fff;*/
-				color: #7abd26;
+				color: #586a8b;
 			}
 
 	.dropotron
@@ -414,7 +416,8 @@
 		background-color: rgba(44,50,63,0.925);
 		padding: 1.25em 1em 1.25em 1em;
 		border-radius: 0.35em;
-		box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.25);
+		/*box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.25);*/
+		box-shadow: inset 0px 0px 1px 1px rgba(50, 59, 78, 0.25);
 		min-width: 12em;
 		text-align: left;
 	}
@@ -431,14 +434,15 @@
 		{
 			display: block;
 			/*color: #eee;*/
-			color: #5e921d;
+			color: #222835;
 			/*color: rgba(255,255,255,0.75);*/
-			color: rgba(94,146,29,0.75);
+			color: rgba(22, 28, 35, 0.75);
 			text-transform: uppercase;
 			text-decoration: none;
 			font-size: 0.7em;
 			letter-spacing: 0.25em;
-			border-top: solid 1px rgba(255,255,255,0.15);
+			/*border-top: solid 1px rgba(255,255,255,0.15);*/
+			border-top: solid 1px rgba(22,28,35,0.15);
 			line-height: 3em;
 			-moz-transition: all .25s ease-in-out;
 			-webkit-transition: all .25s ease-in-out;
@@ -457,7 +461,7 @@
 		.dropotron li:hover > span
 		{
 			/*color: #fff;*/
-			color: #7abd26;
+			color: #586a8b;
 		}
 
 /*********************************************************************************/

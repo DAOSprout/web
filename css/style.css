@@ -918,8 +918,6 @@
 	#header-wrapper
 	{
 		/*background: url('../images/banner.jpg') center center;*/
-        /*background: url('../images/neurons-firing.gif') center center;*/
-        /*background: url('../images/blackpainting.jpg') center center;*/
 		background: url('../images/swissmnts.jpeg') center center;
 		background-size: cover;
 	}
@@ -1101,14 +1099,14 @@
 		{
 			font-weight: 900;
 			text-transform: uppercase;
-			/*color: #fff;*/
-            color: #ccc;
+			color: #fff;
+            /*color: #ccc;*/
 		}
 		
 		#logo .byline
 		{
-			/*color: #fff;*/
-            color: #aaa;
+			color: #fff;
+            /*color: #aaa;*/
             font-weight: 700;
 			text-transform: uppercase;
 		}

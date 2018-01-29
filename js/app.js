@@ -8,10 +8,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.html5Mode(true);
     //$locationProvider.hashPrefix('!');
     $routeProvider.
-            //when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-            //when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-            when('/wallet',{templateUrl: 'templates/wallet.html', controller: 'mainController' }).
+            when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
+            when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
             when('/registry',{templateUrl: 'templates/registry.html', controller: 'mainController' }).
+            when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
+            when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
             otherwise({redirectTo: '/'})
     }]);
 
@@ -25,7 +26,7 @@ app.controller('mainController', ['$scope', '$http', '$location', function ($sco
             return "no-sidebar";
         }
     };
-    $scope.showLogo = function(){
-        return $location.path() === '/' || $location.path() === '/home';
+    $scope.isHome = function(){
+        return $location.path() === '/';
     }
 }]);
