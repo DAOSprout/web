@@ -1,48 +1,170 @@
 <!DOCTYPE HTML>
-<html>
-	<head>
-		<title>DAOSprout</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="Seed Funding | Token-Curated List | Disruptive Community" />
-		<meta name="keywords" content="dao ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/png" href="images/daosprout-icon.png" />
-		<link rel="shortcut icon" href="images/daosprout-icon.png" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-		<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.dropotron.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/jquery.scrollgress.min.js"></script>
-		<script src="assets/js/skel.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-		<script src="assets/js/main.js"></script>
-	</head>
-	<body>
-		<div id="page-wrapper">
+<html ng-app="SC">
+<head>
+    <title>DAOSprout</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Real-Time Decisions for a Real-Time World" />
+    <meta name="keywords" content="real-time" />
+    <meta name="google-site-verification" content="DDEmV859QFjsSFZH6lLy7Z8AZsCg-oXmyg03GErTyFU" />
+    <link rel="icon" type="image/png" href="images/short3-logo.png" />
+    <link rel="shortcut icon" href="images/short3-logo.png" />
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700,900" rel="stylesheet" />
+    <!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.dropotron.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/skel-panels.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="js/app.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="css/skel-noscript.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/style-desktop.css" />
+    </noscript>
+    <base href="/">
+</head>
+<body ng-controller="mainController" class="homepage">
 
-			<!-- Banner -->
-			<section id="banner">
+<!-- Header Wrapper -->
+<div id="header-wrapper" class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="12u">
 
-				<div class="inner">
+                <!-- Header -->
+                <div id="header">
 
-					<header>
-						<h2>DAOSPROUT</h2>
-					</header>
+                    <!-- Logo -->
+                    <div id="logo">
+                        <!--<h1>SynapticCelerity</h1>-->
+                        <img width="60%" src="images/long4.png"/>
+                        <span class="byline" style="color: darkred; font-size: larger">An error occurred. Please try again later.</span>
+                    </div>
+                    <!-- /Logo -->
 
-					<h3>Seed Funding | Token-Curated List | Disruptive Community</h3>
+                    <!-- Nav -->
+                    <nav id="nav">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/wallet">Wallet</a></li>
+                            <li><a href="/registry">Registry</a></li>
+                            <!--<li>-->
+                            <!--<a href="/home#solutions">Solutions</a>-->
+                            <!--<ul>-->
+                            <!--<li><a href="/v4d">Governance</a></li>-->
+                            <!--<li><a href="/home#solutions">Social</a></li>-->
+                            <!--<li><a href="/home#solutions">Gifting</a></li>-->
+                            <!--<li><a href="/home#solutions">Health</a></li>-->
+                            <!--<li><a href="/home#solutions">Market</a></li>-->
+                            <!--<li><a href="/home#solutions">Escrow</a></li>-->
+                            <!--</ul>-->
+                            <!--</li>-->
+                            <!--<li><a href="/docs/sc-wp.pdf" target="_blank">Whitepaper</a></li>-->
+                        </ul>
+                    </nav>
+                    <!-- /Nav -->
 
-					<p><strong>This app is currently down. Please check back later.</strong></p>
+                </div>
+                <!-- /Header -->
 
-				</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Header Wrapper -->
 
-			</section>
+<div ng-view></div>
 
-		</div>
+<!-- Footer Wrapper -->
+<div id="footer-wrapper" class="wrapper">
+    <div id="contact" class="title">Contact</div>
+    <div class="container">
+        <div class="row">
+            <div class="12u">
 
-	</body>
+                <!-- Footer -->
+                <div id="footer">
+                    <header class="style1">
+                        <h2>More information?</h2>
+                        <p class="byline">
+                            To donate, <a target="_blank" href="https://wallethere.com">send ether here</a>.<br/>
+                            To contribute bug fixes, submit pull requests on <a target="_blank" href="https://github.com/DAOSprout">GitHub</a>.<br/>
+                        </p>
+                    </header>
+                    <!--<hr />-->
+                    <!--<div>-->
+                    <!--<div class="row">-->
+                    <!--<div class="6u">-->
+                    <!--<section class="footer-one">-->
+                    <!--<form method="post" action="http://api.daosprout.io/email">-->
+                    <!--<div>-->
+                    <!--<div class="row half">-->
+                    <!--<div class="6u">-->
+                    <!--<input type="text" class="text" name="name" id="contact-name" placeholder="Name" />-->
+                    <!--</div>-->
+                    <!--<div class="6u">-->
+                    <!--<input type="text" class="text" name="name" id="contact-email" placeholder="Email" />-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row half">-->
+                    <!--<div class="12u">-->
+                    <!--<textarea name="message" id="contact-message" placeholder="Message"></textarea>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                    <!--<div class="12u">-->
+                    <!--<ul class="actions">-->
+                    <!--<li><input type="submit" class="button button-style1" value="Send" /></li>-->
+                    <!--<li><input type="reset" class="button button-style2" value="Reset" /></li>-->
+                    <!--</ul>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                    <!--</section>-->
+                    <!--</div>-->
+                    <!--<div class="12u">-->
+
+                    <!-- Contacts -->
+                    <!--<section class="footer-two">-->
+                    <!--<div class="feature-list feature-list-small">-->
+                    <!--<div>-->
+                    <!--<div class="row">-->
+                    <!--<div class="5u">&nbsp;</div>-->
+                    <!--<div class="2u">-->
+                    <!--<section>-->
+                    <!--<a target="_blank" href="https://github.com/DAOSprout"><h3 class="fa fa-github"></h3></a>-->
+                    <!--</section>-->
+                    <!--</div>-->
+                    <!--<div class="5u">&nbsp;</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</section>-->
+                    <!-- /Contacts -->
+
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<hr />-->
+                </div>
+                <!-- /Footer -->
+                <!-- Copyright -->
+                <div id="copyright">
+                     <span>
+                        Copyright &copy;, 2017-2018 DAOSprout&#8482;.<br/>
+                        No reproduction, in whole or in part, without written permission.<br/>
+                        All software is licensed under the <a rel="license" target="_blank" href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License (AGPL) v3</a>.<br/>
+                        HTML5 Responsive Template Design by <a href="http://html5up.net/">HTML5 UP</a>.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Footer Wrapper -->
+
+</body>
 </html>
