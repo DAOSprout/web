@@ -191,6 +191,13 @@
 				margin: -0.5em 0 0 0;
 				padding-top: 0;
 			}
+			.is header.style2
+			{
+				position: relative;
+				margin: -0.5em 0 0 0;
+				padding-top: 0;
+				font-weight: 900;
+			}
 
 		.is h2
 		{
@@ -449,6 +456,7 @@
 			-o-transition: all .25s ease-in-out;
 			-ms-transition: all .25s ease-in-out;
 			transition: all .25s ease-in-out;
+			font-weight: bold;
 		}
 		
 		.dropotron li:first-child a,
