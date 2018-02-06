@@ -93,51 +93,52 @@
 					<div class="6u 12u(mobile)">
 						<!-- Register Form -->
 						<section>
-							<form name="registerForm" id="registerForm">
+							<form novalidate>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="text" name="dao-name" id="dao-name" placeholder="DAO Name" value="Dgramz" />
+										<input type="text" ng-model="reg.name" placeholder="DAO Name" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="text" name="dao-address" id="dao-address" placeholder="DAO Ethereum Address" value="0xe6f74efb07d41f7223e0e4aa19a449857e128bd4" />
+										<input type="text" ng-model="reg.address" placeholder="DAO Ethereum Address" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="site-url" id="site-url" placeholder="Site URL" value="https://dgramz.io/" />
+										<input type="url" ng-model="reg.siteURL" placeholder="Site URL" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="whitepaper-url" id="whitepaper-url" placeholder="Whitepaper URL" value="https://dgramz.io/docs/sc-dgramz-wp.pdf" />
+										<input type="url" ng-model="reg.whitepaperURL" placeholder="Whitepaper URL" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="sourcecode-url" id="sourcecode-url" placeholder="Sourcecode URL" value="https://github.com/SynapticCelerity/platform'" />
+										<input type="url" ng-model="reg.sourcecodeURL" placeholder="Sourcecode URL" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="ico-url" id="ico-url" placeholder="ICO URL" value="https://dgramz.io/#crowdsales"/>
+										<input type="url" ng-model="reg.icoURL" placeholder="ICO URL" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<textarea name="message" id="message" placeholder="Message" rows="4">Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.</textarea>
+										<textarea ng-model="reg.message" placeholder="Message" rows="4"></textarea>
 									</div>
 								</div>
 								<div class="row">
 									<div class="12u">
 										<ul class="actions">
-											<li><input type="submit" class="style1" value="Send" onclick="register();" /></li>
-											<li><input type="reset" class="style2" value="Reset" /></li>
+											<li><input type="submit" class="style1" value="Send" ng-click="register(reg);" /></li>
+											<li><input type="button" class="style2" value="Reset" ng-click="reset();" /></li>
 										</ul>
 									</div>
 								</div>
 							</form>
+							<!--<pre>reg = {{reg | json}}</pre>-->
 						</section>
 
 					</div>
