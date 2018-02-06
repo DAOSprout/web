@@ -47,7 +47,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     $scope.register = function(reg) {
         console.log('register dao called...');
         $scope.reg = angular.copy(reg);
-        regService.register($scope.reg.address, $scope.reg.name, $scope.reg);
+        regService.register(reg.address, reg.name, reg);
     };
     $scope.testWeb3 = function() {
         var message = '';
@@ -56,7 +56,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
             message = 'Meta-mask not connected.\n';
         } else {
             message = 'Meta-mask is connected.\n';
-            message += 'Default Acct: ' + web3.eth.defaultAccount + '\n';
+            message += 'Default Acct: ' + web3.eth.defaultAccount;
 
             web3.eth.getMining(function (error, result) {
                console.log('Is Mining: ' + result);
@@ -483,7 +483,7 @@ app.service('regService', function () {
      * function getEntry(address _entry) constant public returns (address, bytes32, bytes32);
      *
      */
-    var getEntry = function (entryAddress) {
+    this.getEntry = function (entryAddress) {
         console.log('calling regService.getEntry(entryAddress)');
         return registry.getEntry(entryAddress);
     };
@@ -494,7 +494,7 @@ app.service('regService', function () {
      * function register(address _entry, bytes32 _name, bytes32 _info) mustPayFee public payable;
      *
      */
-    var register = function (entryAddress, name, info) {
+    this.register = function (entryAddress, name, info) {
         console.log('calling regService.register(entryAddress, name, info)');
         registry.register(entryAddress, web3.toHex(name), web3.toHex(info), function(error, result) {
             if(error)
@@ -510,7 +510,7 @@ app.service('regService', function () {
      * function setName(address _entry, bytes32 _newName) onlyEntryOwner(_entry) public;
      *
      */
-    var setName = function (entryAddress, newName) {
+    this.setName = function (entryAddress, newName) {
         console.log('calling regService.setName(entryAddress, newName)');
         registry.setName(entryAddress, web3.toHex(newName));
     };
@@ -521,7 +521,7 @@ app.service('regService', function () {
      * function setInfo(address _entry, bytes32 _info) onlyEntryOwner(_entry) public;
      *
      */
-    var setInfo = function (entryAddress, newInfo) {
+    this.setInfo = function (entryAddress, newInfo) {
         console.log('calling regService.setInfo(entryAddress, newInfo)');
         registry.setInfo(entryAddress, web3.toHex(newInfo));
     };
@@ -532,7 +532,7 @@ app.service('regService', function () {
      * transferEntryOwnership(address _entry, address _newOwner) onlyEntryOwner(_entry) public;
      *
      */
-    var transferEntryOwnership = function (entryAddress, newOwnerAddress) {
+    this.transferEntryOwnership = function (entryAddress, newOwnerAddress) {
         console.log('calling regService.transferEntryOwnership(entryAddress, newOwnerAddress)');
         registry.transferOwnership(entryAddress, newOwnerAddress);
     };
