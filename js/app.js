@@ -435,39 +435,51 @@ function init() {
                 "type": "event"
             }
         ]);
-        var Registry = RegistryContract.at(regContractAddress);
-        console.log(Registry);
+        var registry = RegistryContract.at(regContractAddress);
+        console.log(registry);
 
         // Test
-        Registry.feeInWei(function(error,fee) {
-            if (error) {
-                console.log(error);
-                return 0;
-            } else {
-                //var callD = Registry.register.getData();
-                var callData = {_entry: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4', _name: 'temp-name', _info: 'temp-info'};
-                var result = web3.eth.call({
-                    to: regContractAddress,
-                    data: callData,
-                    value: fee
-                }, function(error,result) {
-                    if (error) {
-                        console.log(error);
-                        return 0;
-                    } else {
-                        return result;
-                    }
-                });
-                //Registry.register('0xe6f74efb07d41f7223e0e4aa19a449857e128bd4', 'temp-name', 'temp-info', function(error, result) {
-                //    if(error)
-                //        console.log(error);
-                //    else
-                //        console.log(result);
-                //});
-            }
+        //var callD = Registry.register.getData();
+        //var daoAddress = '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4';
+        var daoAddress = '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4';
+        var daoName = web3.toHex('Dgramz', 32);
+        var daoInfo = web3.toHex({
+            sitURL: 'https://dgramz.io/',
+            whitepaperURL: 'https://dgramz.io/docs/sc-dgramz-wp.pdf',
+            sourcecodeURL: 'https://github.com/SynapticCelerity/platform',
+            icoURL: 'https://dgramz.io/#crowdsales',
+            message: 'Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.'
+        }, 32);
+        //var data = {
+        //    entry: daoAddress,
+        //    name: daoName,
+        //    info: daoInfo
+        //};
+        //var dataHx = web3.toHex(data);
+        //var result = web3.eth.call({
+        //    to: regContractAddress,
+        //    data: dataHx,
+        //    value: fee
+        //}, function(error,result) {
+        //    if (error) {
+        //        console.log(error);
+        //        return 0;
+        //    } else {
+        //        return result;
+        //    }
+        //});
+        registry.register(daoAddress, daoName, daoInfo, function(error, result) {
+           if(error)
+               console.log(error);
+            else
+               console.log(result);
         });
-
-
+        //registry.register('0xe6f74efb07d41f7223e0e4aa19a449857e128bd4', 'temp-name', 'temp-info', function(error, result) {
+        //    if(error)
+        //        console.log(error);
+        //    else
+        //        console.log(result);
+        //});
 
         // services
         app.service('regService', function () {
@@ -550,3 +562,7 @@ window.addEventListener('load', function() {
     init();
 
 });
+
+function register() {
+
+}

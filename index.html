@@ -91,48 +91,48 @@
 				<hr />
 				<div id="register" class="row 150%">
 					<div class="6u 12u(mobile)">
-						<!-- Contact Form -->
+						<!-- Register Form -->
 						<section>
-							<form method="post" action="#">
+							<form name="registerForm" id="registerForm">
 								<div class="row 50%">
 									<div class="12u">
-										<input type="text" name="dao-name" id="dao-name" placeholder="DAO Name" />
+										<input type="text" name="dao-name" id="dao-name" placeholder="DAO Name" value="Dgramz" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="text" name="dao-address" id="dao-address" placeholder="DAO Ethereum Address" />
+										<input type="text" name="dao-address" id="dao-address" placeholder="DAO Ethereum Address" value="0xe6f74efb07d41f7223e0e4aa19a449857e128bd4" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="site-url" id="site-url" placeholder="Site URL" />
+										<input type="url" name="site-url" id="site-url" placeholder="Site URL" value="https://dgramz.io/" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="whitepaper-url" id="whitepaper-url" placeholder="Whitepaper URL" />
+										<input type="url" name="whitepaper-url" id="whitepaper-url" placeholder="Whitepaper URL" value="https://dgramz.io/docs/sc-dgramz-wp.pdf" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="sourcecode-url" id="sourcecode-url" placeholder="Sourcecode URL" />
+										<input type="url" name="sourcecode-url" id="sourcecode-url" placeholder="Sourcecode URL" value="https://github.com/SynapticCelerity/platform'" />
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<input type="url" name="ico-url" id="ico-url" placeholder="ICO URL" />
+										<input type="url" name="ico-url" id="ico-url" placeholder="ICO URL" value="https://dgramz.io/#crowdsales"/>
 									</div>
 								</div>
 								<div class="row 50%">
 									<div class="12u">
-										<textarea name="message" id="message" placeholder="Message" rows="4"></textarea>
+										<textarea name="message" id="message" placeholder="Message" rows="4">Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.</textarea>
 									</div>
 								</div>
 								<div class="row">
 									<div class="12u">
 										<ul class="actions">
-											<li><input type="submit" class="style1" value="Send" /></li>
+											<li><input type="submit" class="style1" value="Send" onclick="register();" /></li>
 											<li><input type="reset" class="style2" value="Reset" /></li>
 										</ul>
 									</div>
