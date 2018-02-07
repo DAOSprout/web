@@ -48,7 +48,7 @@
 									<nav id="nav">
 										<ul>
 											<li><a href="/">Home</a></li>
-											<li><a href="/#register">Register</a></li>
+											<li><a href="/registry">Registry</a></li>
 											<!--<li><a href="/lists">Lists</a></li>-->
 											<!--<li><a href="/sprouts">Sprouts</a></li>-->
 											<!--<li>-->
@@ -93,7 +93,7 @@
 					<div class="6u 12u(mobile)">
 						<!-- Register Form -->
 						<section>
-							<form novalidate>
+							<form>
 								<div class="row 50%">
 									<div class="12u">
 										<input type="text" ng-model="reg.name" placeholder="DAO Name" />
@@ -137,6 +137,16 @@
 										</ul>
 									</div>
 								</div>
+								<div class="row 50%">
+									<div class="12u">
+										<div style="color: #485286" ng-hide="reg.tx===''">{{reg.tx}}</div>
+									</div>
+								</div>
+								<div class="row 50%">
+									<div class="12u">
+										<div style="color: #860d1e" ng-hide="reg.error===''">{{reg.error}}</div>
+									</div>
+								</div>
 							</form>
 							<!--<pre>reg = {{reg | json}}</pre>-->
 						</section>
@@ -161,9 +171,9 @@
 									<section>
 										<h3 class="icon fa-comment">Social</h3>
 										<p>
-											<a href="#">@untitled-corp</a><br />
-											<a href="#">linkedin.com/untitled</a><br />
-											<a href="#">facebook.com/untitled</a>
+											<a href="#">linkedin.com/in/daosprout</a><br />
+											<a href="#">daosprout.onion</a><br />
+											<a href="#">daosprout.i2p</a>
 										</p>
 									</section>
 								</div>
@@ -174,6 +184,7 @@
 										<h3 class="icon fa-envelope">Email</h3>
 										<p>
 											<a href="#">info@daosprout.io</a>
+											<a href="#">info@daosprout.i2p</a>
 										</p>
 									</section>
 								</div>

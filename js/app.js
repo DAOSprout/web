@@ -22,8 +22,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
     when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
     when('/registry',{templateUrl: 'templates/registry.html', controller: 'mainController' }).
-    when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
-    when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
+    //when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
+    //when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
     otherwise({redirectTo: '/'})
 }]);
 
@@ -57,8 +57,20 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     };
     $scope.register = function(reg) {
         console.log('register dao called...');
+        $scope.reg.error = '';
+        $scope.reg.tx = '';
+        reg.status = 'v';
         $scope.reg = angular.copy(reg);
-        regService.register(reg.address, reg.name, reg);
+        regService.register(reg.address, reg.name, reg, function(error, txHash) {
+            if(error) {
+                // notify UI of Error
+                $scope.reg.error = 'Error';
+            } else {
+                // clear form
+                $scope.reg = {};
+                $scope.reg.tx = txHash;
+            }
+        });
     };
     $scope.testWeb3 = function() {
         var message = '';
@@ -112,6 +124,32 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         }
         win.alert(message);
     };
+    $scope.registry = function(start, size) {
+        // TODO: build entries list based on start index inclusive to start + size inclusive, e.g. 10, 3 = 10, 11, 12
+
+    };
+
+    $scope.explorerURL = function(address) {
+        var url = web3.version.getNetwork(function (err, netId) {
+            switch (netId) {
+                case "1":
+                    url = "https://etherscan.io/address/"+address;break;
+                case "2":
+                    console.log('deprecated Morden test network');
+                    throw err;
+                case "3":
+                    url = "https://ropsten.etherscan.io/address/"+address;break;
+                case "4":
+                    url = "https://rinkeby.etherscan.io/address/"+address;break;
+                case "42":
+                    url = "https://kovan.etherscan.io/address/"+address;break;
+                default:
+                    throw err;
+            }
+        });
+        return url;
+    };
+
     console.log('mainController initialized.');
 }]);
 
@@ -517,15 +555,19 @@ app.service('regService', function () {
         registry.feeInWei(function(error, fee) {
             if(error) {
                 console.log(error);
+                throw error;
             } else {
                 registry.register(entryAddress, web3.toHex(name), web3.toHex(info), {
                     gas: 150000,
                     value: fee
                 }, function (error, txHash) {
-                    if (error)
+                    if (error) {
                         console.log(error);
-                    else
+                        throw error;
+                    } else {
                         console.log(txHash);
+                        return txHash;
+                    }
                 });
             }
         });
