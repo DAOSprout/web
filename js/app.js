@@ -1,5 +1,16 @@
 'use strict';
-
+/**
+ * This file is part of DAOSprout.
+ * DAOSprout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License version 3.0 as published by
+ * the Free Software Foundation.
+ * DAOSprout is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with DAOSprout in its root folder. If not, see <http://www.gnu.org/licenses/>.
+ */
 // angular.js main app initialization
 var app = angular.module('DS',['ngRoute']);
 
@@ -474,7 +485,14 @@ app.service('regService', function () {
         }
     ]);
 
+    //var cleanAscii = function (str) {
+    //    web3.toAscii(str).replace(/\u0000/g, '');
+    //};
+
     var registry = RegistryContract.at(regContractAddress);
+    //registry.defaults({
+    //    gasLimit: 100000
+    //});
     console.log('registry: '+registry);
 
     /**
@@ -496,11 +514,20 @@ app.service('regService', function () {
      */
     this.register = function (entryAddress, name, info) {
         console.log('calling regService.register(entryAddress, name, info)');
-        registry.register(entryAddress, web3.toHex(name), web3.toHex(info), function(error, result) {
-            if(error)
+        registry.feeInWei(function(error, fee) {
+            if(error) {
                 console.log(error);
-            else
-                console.log(result);
+            } else {
+                registry.register(entryAddress, web3.toHex(name), web3.toHex(info), {
+                    gas: 150000,
+                    value: fee
+                }, function (error, txHash) {
+                    if (error)
+                        console.log(error);
+                    else
+                        console.log(txHash);
+                });
+            }
         });
     };
 
