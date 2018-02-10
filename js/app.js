@@ -606,6 +606,11 @@ app.service('regService', function () {
         registry.transferOwnership(entryAddress, newOwnerAddress);
     };
 
+    this.loadEntries = function(begin, size, filter, sortBy, order){
+        console.log('calling regService.loadEntries(begin, size, filter, sortBy, order)');
+        // TODO: pull filtered events using web3. sort and order if unable to through web3
+    };
+
     console.log('regService initialized.');
 
 });
