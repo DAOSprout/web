@@ -57,11 +57,12 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     };
     $scope.register = function(reg) {
         console.log('register dao called...');
+        $scope.reg = angular.copy(reg);
         $scope.reg.error = '';
         $scope.reg.tx = '';
-        reg.status = 'v';
-        $scope.reg = angular.copy(reg);
-        regService.register(reg.address, reg.name, reg, function(error, txHash) {
+        $scope.reg.rating = 'n'; // a (Investment Grade) | b (Speculative) | c (Extremely Speculative) | d (In Default) | n (Not Rated)
+        $scope.reg.status = 'vf'; // vf = verifying, rt = rating, rk = ranking, vt = voting, f = funding, p = prototyping, g = general availability, m = marketing
+        regService.register($scope.reg.address, $scope.reg.name, $scope.reg, $scope.reg.status, function(error, txHash) {
             if(error) {
                 // notify UI of Error
                 $scope.reg.error = 'Error';
@@ -124,9 +125,22 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         }
         win.alert(message);
     };
-    $scope.registry = function(start, size) {
-        // TODO: build entries list based on start index inclusive to start + size inclusive, e.g. 10, 3 = 10, 11, 12
+    $scope.registry = function() {
+        var start = $http.get('start');
+        var size = $http.get('size');
+        var filter = $http.get('filter');
+        var sortBy = $http.get('sortBy');
+        var order = $http.get('order');
 
+        regService.loadEntries(start, size, filter, sortBy, order, function(error, entries) {
+            if(error) {
+                // notify UI of Error
+                console.log(error);
+            } else {
+                // build list
+                console.log(entries);
+            }
+        });
     };
 
     $scope.explorerURL = function(address) {
@@ -174,7 +188,8 @@ app.service('regService', function () {
         }
     }, 100);
 
-    var regContractAddress = '0x1b7569f94a4fba9ec9aab7d49ad2ef0beba669aa';
+    //var regContractAddress = '0x1b7569f94a4fba9ec9aab7d49ad2ef0beba669aa';
+    var regContractAddress = '0x08aa91cd234305Ed7a22f2844391D85dEcA46abE';
     var RegistryContract = web3.eth.contract([
         {
             "constant": false,
@@ -236,6 +251,24 @@ app.service('regService', function () {
             "type": "function"
         },
         {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_entry",
+                    "type": "address"
+                },
+                {
+                    "name": "_status",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "setStatus",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "constant": true,
             "inputs": [
                 {
@@ -248,6 +281,10 @@ app.service('regService', function () {
                 {
                     "name": "",
                     "type": "address"
+                },
+                {
+                    "name": "",
+                    "type": "bytes32"
                 },
                 {
                     "name": "",
@@ -329,6 +366,10 @@ app.service('regService', function () {
                 {
                     "name": "info",
                     "type": "bytes32"
+                },
+                {
+                    "name": "status",
+                    "type": "bytes32"
                 }
             ],
             "payable": false,
@@ -362,6 +403,10 @@ app.service('regService', function () {
                 },
                 {
                     "name": "_info",
+                    "type": "bytes32"
+                },
+                {
+                    "name": "_status",
                     "type": "bytes32"
                 }
             ],
@@ -398,6 +443,11 @@ app.service('regService', function () {
                 {
                     "indexed": false,
                     "name": "info",
+                    "type": "bytes32"
+                },
+                {
+                    "indexed": true,
+                    "name": "status",
                     "type": "bytes32"
                 },
                 {
@@ -479,6 +529,28 @@ app.service('regService', function () {
             "anonymous": false,
             "inputs": [
                 {
+                    "indexed": true,
+                    "name": "entryAddress",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "status",
+                    "type": "bytes32"
+                },
+                {
+                    "indexed": true,
+                    "name": "owner",
+                    "type": "address"
+                }
+            ],
+            "name": "UpdatedStatus",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
                     "indexed": false,
                     "name": "newFee",
                     "type": "uint256"
@@ -550,14 +622,16 @@ app.service('regService', function () {
      * function register(address _entry, bytes32 _name, bytes32 _info) mustPayFee public payable;
      *
      */
-    this.register = function (entryAddress, name, info) {
-        console.log('calling regService.register(entryAddress, name, info)');
+    this.register = function (entryAddress, name, info, status) {
+        console.log('calling regService.feeInWei()');
         registry.feeInWei(function(error, fee) {
             if(error) {
                 console.log(error);
                 throw error;
             } else {
-                registry.register(entryAddress, web3.toHex(name), web3.toHex(info), {
+                console.log('fee in Wei:'+fee);
+                console.log('calling regService.register(entryAddress, name, info, status)');
+                registry.register(entryAddress, web3.toHex(name), web3.toHex(info), web3.toHex(status), {
                     gas: 150000,
                     value: fee
                 }, function (error, txHash) {
@@ -606,9 +680,29 @@ app.service('regService', function () {
         registry.transferOwnership(entryAddress, newOwnerAddress);
     };
 
+    /**
+     * Build entries list based on start index inclusive to start + size inclusive, e.g. 10, 3 = 10, 11, 12
+     * @param begin
+     * @param size
+     * @param filter
+     * @param sortBy
+     * @param order
+     */
     this.loadEntries = function(begin, size, filter, sortBy, order){
         console.log('calling regService.loadEntries(begin, size, filter, sortBy, order)');
         // TODO: pull filtered events using web3. sort and order if unable to through web3
+        registry.events.getPastEvents('AddedEntry', {
+            filter: {status: filter},
+            fromBlock: 0,
+            toBlock: 'latest'
+        }, function(error, events){
+            if(error) {
+                console.log(error);
+            } else {
+                console.log(events);
+
+            }
+        });
     };
 
     console.log('regService initialized.');
