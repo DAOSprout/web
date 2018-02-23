@@ -25,24 +25,19 @@
 									</article>
 									<div>
 										<div><input type="text" ng-model="searchBox"/><br/><br/></div>
-										<div ng-repeat="entry in entries | filter:searchBox:entry.name track by $index" class="row">
+										<div ng-repeat="entry in entries | filter:searchBox:entry.name | orderBy:'entry.name' track by $index" class="row">
 											<div class="12u">
 												<section class="is is-triple-one">
-													<header>
-														<h2><img width="2%" src="../images/circle-green.jpeg"/>&nbsp;{{entry.name}}</h2>
-														<p class="byline">
-															Status:&nbsp;{{entry.status}}&nbsp;|&nbsp;Rating:&nbsp;{{entry.rating}}&nbsp;|
-															<a target="_blank" ng-href="{{entry.siteURL}}">Site</a> |
-															<a target="_blank" ng-href="{{explorerURL(entry.address)}}">Contract</a> |
-															<a target="_blank" ng-href="{{entry.whitepaperURL}}">Whitepaper</a> |
-															<a target="_blank" ng-href="{{entry.sourcecodeURL}}">Code</a> |
-															<a target="_blank" ng-href="{{entry.icoURL}}">ICO</a><br/>
-														</p>
-													</header>
 													<p>
+														<img width="1%" src="../images/circle-green.jpeg"/>Name:&nbsp;{{entry.name}}&nbsp;|
+														Status:&nbsp;{{entry.status}}&nbsp;|&nbsp;Rating:&nbsp;{{entry.rating}}&nbsp;|
+														<a target="_blank" ng-href="{{entry.siteURL}}">Site</a> |
+														<a target="_blank" ng-href="{{explorerURL(entry.address)}}">Contract</a> |
+														<a target="_blank" ng-href="{{entry.whitepaperURL}}">Whitepaper</a> |
+														<a target="_blank" ng-href="{{entry.sourcecodeURL}}">Code</a> |
+														<a target="_blank" ng-href="{{entry.icoURL}}">ICO</a> |
 														{{entry.message}}
 													</p>
-													<!--<a href="#" class="button button-style1">More</a>-->
 												</section>
 											</div>
 										</div>
