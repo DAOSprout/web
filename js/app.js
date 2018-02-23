@@ -16,15 +16,17 @@ var app = angular.module('DS',['ngRoute']);
 
 // routes
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    console.log('initializing config...');
     $locationProvider.html5Mode(true);
     //$locationProvider.hashPrefix('!');
     $routeProvider.
     when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
     when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-    when('/registry',{templateUrl: 'templates/registry.html', controller: 'mainController' }).
+    when('/registry',{templateUrl: 'templates/registry.html', controller: 'registryController' }).
     //when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
     //when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
     otherwise({redirectTo: '/'})
+    console.log('config initialized.');
 }]);
 
 // controllers
@@ -32,6 +34,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     console.log('initializing mainController...');
 
     $scope.currentPath = $location.path();
+    //console.log($scope.currentPath);
     $scope.reg = {
         name: 'Dgramz',
         address: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4',
@@ -83,7 +86,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
             message += 'Default Acct: ' + web3.eth.defaultAccount;
 
             web3.eth.getMining(function (error, result) {
-               console.log('Is Mining: ' + result);
+                console.log('Is Mining: ' + result);
             });
             web3.eth.getAccounts(function (err, accounts) {
                 web3.eth.getBalance(accounts[0], function (err, balance) {
@@ -125,23 +128,6 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         }
         win.alert(message);
     };
-    $scope.registry = function() {
-        var start = $http.get('start');
-        var size = $http.get('size');
-        var filter = $http.get('filter');
-        var sortBy = $http.get('sortBy');
-        var order = $http.get('order');
-
-        regService.loadEntries(start, size, filter, sortBy, order, function(error, entries) {
-            if(error) {
-                // notify UI of Error
-                console.log(error);
-            } else {
-                // build list
-                console.log(entries);
-            }
-        });
-    };
 
     $scope.explorerURL = function(address) {
         var url = web3.version.getNetwork(function (err, netId) {
@@ -165,7 +151,49 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     };
 
     console.log('mainController initialized.');
+
 }]);
+
+app.controller('registryController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
+    console.log('initializing registryController...');
+    $scope.entries = [];
+
+    var start = 0; // $http.get('start');
+    var size = 10; // $http.get('size');
+    var filter = 'vf'; // $http.get('filter');
+    var sortBy = ''; // $http.get('sortBy');
+    var order = ''; // $http.get('order');
+    console.log('calling regService.loadEntries(start, size, filter, sortBy, order, function(error, entries)');
+    regService.loadEntries(start, size, filter, sortBy, order, function(error, results) {
+        if(error) {
+            console.log('web:error:'+error);
+        } else {
+            console.log('web:results: '+results);
+            if(results !== null) {
+                // iterate of args
+                for(var i= 0, len = results.length; i < len; i++) {
+                    $scope.entries[i] = {
+                        name: '',
+                        address: '',
+                        status: '',
+                        rating: '',
+                        siteURL: '',
+                        whitepaperURL: '',
+                        sourcecodeURL: '',
+                        icoURL: '',
+                        message: ''
+                    }
+                }
+            }
+        }
+    });
+
+    console.log('registryController initialized.');
+}]);
+
+// directives
+
+// filters
 
 // services
 app.service('regService', function () {
@@ -180,6 +208,7 @@ app.service('regService', function () {
         //web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
     }
+    console.log('web3 version: '+web3.version.api);
     web3.eth.defaultAccount = web3.eth.accounts[0];
     var accountInterval = setInterval(function () {
         if (web3.eth.accounts[0] !== web3.eth.defaultAccount) {
@@ -603,7 +632,8 @@ app.service('regService', function () {
     //registry.defaults({
     //    gasLimit: 100000
     //});
-    console.log('registry: '+registry);
+    //console.log('registry: '+registry);
+    var results = [];
 
     /**
      * Get Entry
@@ -670,6 +700,17 @@ app.service('regService', function () {
     };
 
     /**
+     * Set Status
+     *
+     * function setStatus(address _entry, bytes32 _status) onlyEntryOwner(_entry) public;
+     *
+     */
+    this.setStatus = function (entryAddress, newStatus) {
+        console.log('calling regService.setInfo(entryAddress, newStatus)');
+        registry.setStatus(entryAddress, web3.toHex(newStatus));
+    };
+
+    /**
      * Transfer Entry Ownership
      *
      * transferEntryOwnership(address _entry, address _newOwner) onlyEntryOwner(_entry) public;
@@ -688,30 +729,14 @@ app.service('regService', function () {
      * @param sortBy
      * @param order
      */
-    this.loadEntries = function(begin, size, filter, sortBy, order){
-        console.log('calling regService.loadEntries(begin, size, filter, sortBy, order)');
-        // TODO: pull filtered events using web3. sort and order if unable to through web3
-        registry.events.getPastEvents('AddedEntry', {
-            filter: {status: filter},
-            fromBlock: 0,
-            toBlock: 'latest'
-        }, function(error, events){
-            if(error) {
-                console.log(error);
-            } else {
-                console.log(events);
-
-            }
-        });
+    this.loadEntries = function(begin, size, filter, sortBy, order, cb){
+        console.log('calling registry.allEvents()');
+        registry.allEvents({fromBlock: 0, toBlock: 'latest'}).get(cb);
     };
 
     console.log('regService initialized.');
 
 });
-
-// filters
-
-// directives
 
 function init() {
 
