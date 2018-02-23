@@ -185,7 +185,7 @@ app.controller('registryController', ['$scope', '$http', '$location', '$window',
             //for(var i = 0, len = results.length; i < len; i++) {
             for(var i = 0, len = 5; i < len; i++) {
                 $scope.entries[i] = {
-                    name: 'name',
+                    name: 'name-'+i,
                     address: 'address',
                     status: 'rt',
                     rating: 'A',
@@ -197,6 +197,7 @@ app.controller('registryController', ['$scope', '$http', '$location', '$window',
                 }
             }
             console.log('entries onSuccess: '+$scope.entries);
+            $scope.$apply();
         }
     }
 
