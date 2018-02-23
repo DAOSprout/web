@@ -31,7 +31,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 // controllers
 app.controller('mainController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
-    console.log('initializing mainController...');
+    console.log('entering mainController...');
 
     $scope.currentPath = $location.path();
     //console.log($scope.currentPath);
@@ -150,45 +150,67 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         return url;
     };
 
-    console.log('mainController initialized.');
+    console.log('mainController exited.');
 
 }]);
 
 app.controller('registryController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
-    console.log('initializing registryController...');
-    $scope.entries = [];
-
+    console.log('entering registryController...');
     var start = 0; // $http.get('start');
     var size = 10; // $http.get('size');
     var filter = 'vf'; // $http.get('filter');
     var sortBy = ''; // $http.get('sortBy');
     var order = ''; // $http.get('order');
-    console.log('calling regService.loadEntries(start, size, filter, sortBy, order, function(error, entries)');
-    regService.loadEntries(start, size, filter, sortBy, order, function(error, results) {
-        if(error) {
-            console.log('web:error:'+error);
-        } else {
-            console.log('web:results: '+results);
-            if(results !== null) {
-                // iterate of args
-                for(var i= 0, len = results.length; i < len; i++) {
-                    $scope.entries[i] = {
-                        name: '',
-                        address: '',
-                        status: '',
-                        rating: '',
-                        siteURL: '',
-                        whitepaperURL: '',
-                        sourcecodeURL: '',
-                        icoURL: '',
-                        message: ''
-                    }
+    $scope.entries = [{
+        name: 'Init',
+        address: 'init-address',
+        status: 'vf',
+        rating: 'B',
+        siteURL: 'https://here.com',
+        whitepaperURL: 'https://there.com',
+        sourcecodeURL: 'https://nowhere.com',
+        icoURL: 'https://everywhere.com',
+        message: 'bigmessagetoyou'
+    }];
+
+    function onError(e) {
+        console.log('web:error:'+e);
+    }
+
+    function onSuccess(r) {
+        console.log('web:results: '+r);
+        if(r !== null) {
+            // iterate of args
+            //var list = [];
+            //for(var i = 0, len = results.length; i < len; i++) {
+            for(var i = 0, len = 5; i < len; i++) {
+                $scope.entries[i] = {
+                    name: 'name',
+                    address: 'address',
+                    status: 'rt',
+                    rating: 'A',
+                    siteURL: 'https://here.com',
+                    whitepaperURL: 'https://there.com',
+                    sourcecodeURL: 'https://nowhere.com',
+                    icoURL: 'https://everywhere.com',
+                    message: 'bigmessagetome'
                 }
             }
+            console.log('entries onSuccess: '+$scope.entries);
+        }
+    }
+
+    console.log('calling regService.loadEntries(start, size, filter, sortBy, order, function(error, entries)');
+    regService.loadEntries(start, size, filter, sortBy, order, function(e, r) {
+        if(e) {
+            onError(e);
+            throw e;
+        } else {
+            onSuccess(r);
         }
     });
-
-    console.log('registryController initialized.');
+    console.log('entries on exit: '+$scope.entries);
+    console.log('registryController exited.');
 }]);
 
 // directives

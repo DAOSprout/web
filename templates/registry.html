@@ -24,11 +24,12 @@
 										</p>
 									</article>
 									<div>
-										<div data-ng-repeat="entry in entries" class="row">
+										<div><input type="text" ng-model="searchBox"/><br/><br/></div>
+										<div ng-repeat="entry in entries | filter:searchBox:entry.name track by $index" class="row">
 											<div class="12u">
 												<section class="is is-triple-one">
 													<header>
-														<h2><img width="5%" src="../images/circle-green.jpeg"/>&nbsp;{{entry.name}}</h2>
+														<h2><img width="2%" src="../images/circle-green.jpeg"/>&nbsp;{{entry.name}}</h2>
 														<p class="byline">
 															Status:&nbsp;{{entry.status}}&nbsp;|&nbsp;Rating:&nbsp;{{entry.rating}}&nbsp;|
 															<a target="_blank" ng-href="{{entry.siteURL}}">Site</a> |
