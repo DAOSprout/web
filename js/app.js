@@ -20,9 +20,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.html5Mode(true);
     //$locationProvider.hashPrefix('!');
     $routeProvider.
-    when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-    when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-    when('/registry',{templateUrl: 'templates/registry.html', controller: 'registryController' }).
+    when('/',{templateUrl: 'templates/home.html'}).
+    when('/home',{templateUrl: 'templates/home.html'}).
+    when('/registry',{templateUrl: 'templates/registry.html'}).
     //when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
     //when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
     otherwise({redirectTo: '/'})
@@ -30,20 +30,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 }]);
 
 // controllers
-app.controller('mainController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
+app.controller('homeController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
     console.log('entering mainController...');
 
     $scope.currentPath = $location.path();
     //console.log($scope.currentPath);
-    $scope.reg = {
-        name: 'Dgramz',
-        address: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4',
-        siteURL: 'https://dgramz.io/',
-        whitepaperURL: 'https://dgramz.io/docs/sc-dgramz-wp.pdf',
-        sourcecodeURL: 'https://github.com/SynapticCelerity/platform',
-        icoURL: 'https://dgramz.io/#crowdsales',
-        message: 'Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.'
-    };
 
     $scope.selectClass = function () {
         if($location.path() === '/' || $location.path() === '/home') {
@@ -55,6 +46,24 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     $scope.isHome = function() {
         return $location.path() === '/';
     };
+
+    console.log('mainController exited.');
+
+}]);
+
+app.controller('registerController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
+    console.log('entering registerController...');
+
+    $scope.reg = {
+        name: 'Dgramz',
+        address: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4',
+        siteURL: 'https://dgramz.io/',
+        whitepaperURL: 'https://dgramz.io/docs/sc-dgramz-wp.pdf',
+        sourcecodeURL: 'https://github.com/SynapticCelerity/platform',
+        icoURL: 'https://dgramz.io/#crowdsales',
+        message: 'Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.'
+    };
+
     $scope.reset = function() {
         $scope.reg = {};
     };
@@ -76,6 +85,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
             }
         });
     };
+
     $scope.testWeb3 = function() {
         var message = '';
         if(!web3.isConnected()) {
@@ -129,87 +139,103 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         win.alert(message);
     };
 
-    $scope.explorerURL = function(address) {
-        var url = web3.version.getNetwork(function (err, netId) {
-            switch (netId) {
-                case "1":
-                    url = "https://etherscan.io/address/"+address;break;
-                case "2":
-                    console.log('deprecated Morden test network');
-                    throw err;
-                case "3":
-                    url = "https://ropsten.etherscan.io/address/"+address;break;
-                case "4":
-                    url = "https://rinkeby.etherscan.io/address/"+address;break;
-                case "42":
-                    url = "https://kovan.etherscan.io/address/"+address;break;
-                default:
-                    throw err;
-            }
-        });
-        return url;
-    };
-
-    console.log('mainController exited.');
-
+    console.log('registerController exited.');
 }]);
 
 app.controller('registryController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
     console.log('entering registryController...');
+
     var start = 0; // $http.get('start');
     var size = 10; // $http.get('size');
     var filter = 'vf'; // $http.get('filter');
     var sortBy = ''; // $http.get('sortBy');
     var order = ''; // $http.get('order');
-    $scope.entries = [{
-        name: 'Init',
-        address: 'init-address',
-        status: 'vf',
-        rating: 'B',
-        siteURL: 'https://here.com',
-        whitepaperURL: 'https://there.com',
-        sourcecodeURL: 'https://nowhere.com',
-        icoURL: 'https://everywhere.com',
-        message: 'bigmessagetoyou'
-    }];
 
-    function onError(e) {
-        console.log('web:error:'+e);
-    }
+    $scope.entries = [];
 
-    function onSuccess(r) {
-        console.log('web:results: '+r);
-        if(r !== null) {
-            // iterate of args
-            //var list = [];
-            //for(var i = 0, len = results.length; i < len; i++) {
-            for(var i = 0, len = 5; i < len; i++) {
-                $scope.entries[i] = {
-                    name: 'name-'+i,
-                    address: 'address',
-                    status: 'rt',
-                    rating: 'A',
-                    siteURL: 'https://here.com',
-                    whitepaperURL: 'https://there.com',
-                    sourcecodeURL: 'https://nowhere.com',
-                    icoURL: 'https://everywhere.com',
-                    message: 'bigmessagetome'
-                }
-            }
-            console.log('entries onSuccess: '+$scope.entries);
-            $scope.$apply();
+    $scope.networkURL = "";
+    web3.version.getNetwork(function (err, netId) {
+        switch (netId) {
+            case "1":
+                $scope.networkURL = "https://etherscan.io/address/";$scope.$apply();break;
+            case "2":
+                console.log('deprecated Morden test network');break;
+            case "3":
+                $scope.networkURL = "https://ropsten.etherscan.io/address/";$scope.$apply();break;
+            case "4":
+                $scope.networkURL = "https://rinkeby.etherscan.io/address/";$scope.$apply();break;
+            case "42":
+                $scope.networkURL = "https://kovan.etherscan.io/address/";$scope.$apply();break;
         }
-    }
+    });
+
+    $scope.explorerURL = function(address) {
+        if(address !== null)
+            return $scope.networkURL + address;
+        else
+            return $scope.networkURL;
+    };
+
+    //function onError(e) {
+    //    console.log('web:error:'+e);
+    //}
+
+    //function onSuccess(r) {
+    //    console.log('web:results: '+r);
+    //    if(r !== null) {
+    //        // iterate of args
+    //        //var list = [];
+    //        for(var i = 0, len = r.length; i < len; i++) {
+    //        //for(var i = 0, len = 5; i < len; i++) {
+    //            console.log('info='+web3.toAscii(r[i].args.info));
+    //            $scope.entries[i] = {
+    //                name: web3.toAscii(r[i].args.name),
+    //                address: r[i].args.address,
+    //                status: web3.toAscii(r[i].args.status),
+    //                rating: 'A',
+    //                siteURL: 'https://here.com',
+    //                whitepaperURL: 'https://there.com',
+    //                sourcecodeURL: 'https://nowhere.com',
+    //                icoURL: 'https://everywhere.com',
+    //                message: 'bigmessagetome'
+    //            }
+    //        }
+    //        console.log('entries onSuccess: '+$scope.entries);
+    //        $scope.$apply();
+    //    }
+    //}
 
     console.log('calling regService.loadEntries(start, size, filter, sortBy, order, function(error, entries)');
     regService.loadEntries(start, size, filter, sortBy, order, function(e, r) {
         if(e) {
-            onError(e);
+            console.log('web:error:'+e);
             throw e;
         } else {
-            onSuccess(r);
+            console.log('web:results: '+r);
+            if(r !== null) {
+                // iterate of args
+                //var list = [];
+                for(var i = 0, len = r.length; i < len; i++) {
+                    //for(var i = 0, len = 5; i < len; i++) {
+                    console.log('info='+web3.toAscii(r[i].args.info));
+                    $scope.entries[i] = {
+                        name: web3.toAscii(r[i].args.name),
+                        address: r[i].args.address,
+                        status: web3.toAscii(r[i].args.status),
+                        rating: 'A',
+                        siteURL: 'https://here.com',
+                        whitepaperURL: 'https://there.com',
+                        sourcecodeURL: 'https://nowhere.com',
+                        icoURL: 'https://everywhere.com',
+                        message: 'bigmessagetome'
+                    }
+                }
+                console.log('entries onSuccess: '+$scope.entries);
+                $scope.$apply();
+            }
         }
     });
+
     console.log('entries on exit: '+$scope.entries);
     console.log('registryController exited.');
 }]);
