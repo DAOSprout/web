@@ -30,8 +30,8 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 }]);
 
 // controllers
-app.controller('homeController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
-    console.log('entering mainController...');
+app.controller('bodyController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location) {
+    console.log('entering bodyController...');
 
     $scope.currentPath = $location.path();
     //console.log($scope.currentPath);
@@ -47,8 +47,15 @@ app.controller('homeController', ['$scope', '$http', '$location', '$window', 're
         return $location.path() === '/';
     };
 
-    console.log('mainController exited.');
+    console.log('bodyController exited.');
+}]);
 
+app.controller('homeController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location) {
+    console.log('entering homeController...');
+
+
+
+    console.log('homeController exited.');
 }]);
 
 app.controller('registerController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
@@ -77,7 +84,7 @@ app.controller('registerController', ['$scope', '$http', '$location', '$window',
         regService.register($scope.reg.address, $scope.reg.name, $scope.reg, $scope.reg.status, function(error, txHash) {
             if(error) {
                 // notify UI of Error
-                $scope.reg.error = 'Error';
+                $scope.reg.error = 'Error:'+error;
             } else {
                 // clear form
                 $scope.reg = {};
@@ -157,24 +164,19 @@ app.controller('registryController', ['$scope', '$http', '$location', '$window',
     web3.version.getNetwork(function (err, netId) {
         switch (netId) {
             case "1":
-                $scope.networkURL = "https://etherscan.io/address/";$scope.$apply();break;
+                $scope.networkURL = "https://etherscan.io/address/";break;
             case "2":
                 console.log('deprecated Morden test network');break;
             case "3":
-                $scope.networkURL = "https://ropsten.etherscan.io/address/";$scope.$apply();break;
+                $scope.networkURL = "https://ropsten.etherscan.io/address/";break;
             case "4":
-                $scope.networkURL = "https://rinkeby.etherscan.io/address/";$scope.$apply();break;
+                $scope.networkURL = "https://rinkeby.etherscan.io/address/";break;
             case "42":
-                $scope.networkURL = "https://kovan.etherscan.io/address/";$scope.$apply();break;
+                $scope.networkURL = "https://kovan.etherscan.io/address/";break;
+            default:
+                $scope.networkURL = "https://etherscan.io/address/";
         }
     });
-
-    $scope.explorerURL = function(address) {
-        if(address !== null)
-            return $scope.networkURL + address;
-        else
-            return $scope.networkURL;
-    };
 
     //function onError(e) {
     //    console.log('web:error:'+e);
