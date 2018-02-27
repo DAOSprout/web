@@ -1,5 +1,5 @@
 <!-- Main Wrapper -->
-<div class="wrapper wrapper-style2">
+<div ng-controller="registryController" class="wrapper wrapper-style2">
 	<div class="title">Registry</div>
 	<div class="container">
 		<div class="row">
@@ -20,51 +20,24 @@
 											<!--<br class="mobile-hide" />-->
 										<!--</header>-->
 										<p>
-											Voluntary relationships. Live by the Non-Aggression Principle (NAP). Initiation of force or the threat of it needs
-											to be outlawed.
+											List of all registrations and their status.
 										</p>
 									</article>
 									<div>
-										<div class="row">
-											<div class="3u">
+										<div>Search: <input type="text" ng-model="searchBox"/><br/><br/></div>
+										<div ng-repeat="entry in entries | filter:searchBox:entry.name | orderBy:'entry.name' track by $index" class="row">
+											<div class="12u">
 												<section class="is is-triple-one">
-													<header>
-														<h2>Minority Representation</h2>
-														<p class="byline">Away From Majority Rule Democracy</p>
-													</header>
-													<p>Individual minorities have as much power as an individual of the majority.</p>
-													<!--<a href="#" class="button button-style1">More</a>-->
-												</section>
-											</div>
-											<div class="3u">
-												<section class="is is-triple-two">
-													<header>
-														<h2>Equality in Decision Making</h2>
-														<p class="byline">We are all universal beings</p>
-													</header>
-													<p>Unanimity ensures all are respected.</p>
-													<!--<a href="#" class="button button-style1">More</a>-->
-												</section>
-											</div>
-											<div class="3u">
-												<section class="is is-triple-three">
-													<header>
-														<h2>The Non-Aggression Principle</h2>
-														<p class="byline">No Support for Initiation of Force or Coercion</p>
-													</header>
-													<p>Unanimity does not support anyone forcing their ideas onto others.</p>
-													<!--<a href="#" class="button button-style1">More</a>-->
-												</section>
-											</div>
-											<div class="3u">
-												<section class="is is-triple-three">
-													<header>
-														<h2>Constructive Abstention</h2>
-														<p class="byline">Non-Blocking</p>
-													</header>
-													<!--<a href="http://fav.me/d5qdf2o" class="image image-full"><img src="images/direct-democracy.png" alt="" /></a>-->
-													<p>A member can abstain in a vote without thereby blocking the success of the vote.</p>
-													<!--<a href="#" class="button button-style1">More</a>-->
+													<p>
+														<img width="1%" src="../images/circle-green.jpeg"/>Name:&nbsp;{{entry.name}}&nbsp;|
+														Status:&nbsp;{{entry.status}}&nbsp;|&nbsp;Rating:&nbsp;{{entry.rating}}&nbsp;|
+														<a target="_blank" ng-href="{{entry.siteURL}}">Site</a> |
+														<a target="_blank" ng-href="{{networkURL+entry.address}}">Contract</a> |
+														<a target="_blank" ng-href="{{entry.whitepaperURL}}">Whitepaper</a> |
+														<a target="_blank" ng-href="{{entry.sourcecodeURL}}">Code</a> |
+														<a target="_blank" ng-href="{{entry.icoURL}}">ICO</a> |
+														{{entry.message}}
+													</p>
 												</section>
 											</div>
 										</div>

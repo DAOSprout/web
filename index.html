@@ -3,8 +3,8 @@
 	<head>
 		<title>DAOSprout</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="AI Assistance for Humanity" />
-		<meta name="keywords" content="artificial intelligence neuroevolution decentralization" />
+		<meta name="description" content="Seed Funding Token-Curated List Regenerative Community" />
+		<meta name="keywords" content="DAO Decentralized Autonomous Organization Seed Funding Token-Curated List Regenerative Community" />
         <meta name="google-site-verification" content="DDEmV859QFjsSFZH6lLy7Z8AZsCg-oXmyg03GErTyFU" />
         <link rel="icon" type="image/png" href="images/daosprout-icon.png" />
         <link rel="shortcut icon" href="images/daosprout-icon.png" />
@@ -25,7 +25,7 @@
 		</noscript>
 		<base href="/">
 	</head>
-	<body ng-controller="mainController" ng-class="selectClass()">
+	<body ng-controller="bodyController" ng-class="selectClass()">
 
 		<!-- Header Wrapper -->
 			<div id="header-wrapper" class="wrapper">
@@ -48,7 +48,7 @@
 									<nav id="nav">
 										<ul>
 											<li><a href="/">Home</a></li>
-											<li><a href="/#register">Register</a></li>
+											<li><a href="/registry">Registry</a></li>
 											<!--<li><a href="/lists">Lists</a></li>-->
 											<!--<li><a href="/sprouts">Sprouts</a></li>-->
 											<!--<li>-->
@@ -79,7 +79,7 @@
 		<div ng-view autoscroll="true"></div>
 
 		<!-- Footer -->
-		<div id="footer-wrapper" class="wrapper">
+		<div ng-controller="registerController" id="footer-wrapper" class="wrapper">
 			<div id="footer" class="title">Register</div>
 			<div class="container">
 				<header class="style1">
@@ -93,7 +93,7 @@
 					<div class="6u 12u(mobile)">
 						<!-- Register Form -->
 						<section>
-							<form novalidate>
+							<form>
 								<div class="row 50%">
 									<div class="12u">
 										<input type="text" ng-model="reg.name" placeholder="DAO Name" />
@@ -137,6 +137,16 @@
 										</ul>
 									</div>
 								</div>
+								<div class="row 50%">
+									<div class="12u">
+										<div style="color: #485286" ng-hide="reg.tx===''">Transaction: {{reg.tx}}</div>
+									</div>
+								</div>
+								<div class="row 50%">
+									<div class="12u">
+										<div style="color: #860d1e" ng-hide="reg.error===''">{{reg.error}}</div>
+									</div>
+								</div>
 							</form>
 							<!--<pre>reg = {{reg | json}}</pre>-->
 						</section>
@@ -161,9 +171,9 @@
 									<section>
 										<h3 class="icon fa-comment">Social</h3>
 										<p>
-											<a href="#">@untitled-corp</a><br />
-											<a href="#">linkedin.com/untitled</a><br />
-											<a href="#">facebook.com/untitled</a>
+											<a href="#">linkedin.com/in/daosprout</a><br />
+											<a href="#">daosprout.onion</a><br />
+											<a href="#">daosprout.i2p</a>
 										</p>
 									</section>
 								</div>
@@ -174,6 +184,7 @@
 										<h3 class="icon fa-envelope">Email</h3>
 										<p>
 											<a href="#">info@daosprout.io</a>
+											<a href="#">info@daosprout.i2p</a>
 										</p>
 									</section>
 								</div>

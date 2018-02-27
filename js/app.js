@@ -16,31 +16,25 @@ var app = angular.module('DS',['ngRoute']);
 
 // routes
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    console.log('initializing config...');
     $locationProvider.html5Mode(true);
     //$locationProvider.hashPrefix('!');
     $routeProvider.
-    when('/',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-    when('/home',{templateUrl: 'templates/home.html', controller: 'mainController' }).
-    when('/registry',{templateUrl: 'templates/registry.html', controller: 'mainController' }).
-    when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
-    when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
+    when('/',{templateUrl: 'templates/home.html'}).
+    when('/home',{templateUrl: 'templates/home.html'}).
+    when('/registry',{templateUrl: 'templates/registry.html'}).
+    //when('/lists',{templateUrl: 'templates/lists.html', controller: 'mainController' }).
+    //when('/sprouts',{templateUrl: 'templates/sprouts.html', controller: 'mainController' }).
     otherwise({redirectTo: '/'})
+    console.log('config initialized.');
 }]);
 
 // controllers
-app.controller('mainController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
-    console.log('initializing mainController...');
+app.controller('bodyController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location) {
+    console.log('entering bodyController...');
 
     $scope.currentPath = $location.path();
-    $scope.reg = {
-        name: 'Dgramz',
-        address: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4',
-        siteURL: 'https://dgramz.io/',
-        whitepaperURL: 'https://dgramz.io/docs/sc-dgramz-wp.pdf',
-        sourcecodeURL: 'https://github.com/SynapticCelerity/platform',
-        icoURL: 'https://dgramz.io/#crowdsales',
-        message: 'Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.'
-    };
+    //console.log($scope.currentPath);
 
     $scope.selectClass = function () {
         if($location.path() === '/' || $location.path() === '/home') {
@@ -52,14 +46,53 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
     $scope.isHome = function() {
         return $location.path() === '/';
     };
+
+    console.log('bodyController exited.');
+}]);
+
+app.controller('homeController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location) {
+    console.log('entering homeController...');
+
+
+
+    console.log('homeController exited.');
+}]);
+
+app.controller('registerController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
+    console.log('entering registerController...');
+
+    $scope.reg = {
+        name: 'Dgramz',
+        address: '0xe6f74efb07d41f7223e0e4aa19a449857e128bd4',
+        siteURL: 'https://dgramz.io/',
+        whitepaperURL: 'https://dgramz.io/docs/sc-dgramz-wp.pdf',
+        sourcecodeURL: 'https://github.com/SynapticCelerity/platform',
+        icoURL: 'https://dgramz.io/#crowdsales',
+        message: 'Dgramz Android app uses Synaptic Celerity platform which is about 40% completed in support of the Dgramz prototype.'
+    };
+
     $scope.reset = function() {
         $scope.reg = {};
     };
     $scope.register = function(reg) {
         console.log('register dao called...');
         $scope.reg = angular.copy(reg);
-        regService.register(reg.address, reg.name, reg);
+        $scope.reg.error = '';
+        $scope.reg.tx = '';
+        $scope.reg.rating = 'n'; // a (Investment Grade) | b (Speculative) | c (Extremely Speculative) | d (In Default) | n (Not Rated)
+        $scope.reg.status = 'vf'; // vf = verifying, rt = rating, rk = ranking, vt = voting, f = funding, p = prototyping, g = general availability, m = marketing
+        regService.register($scope.reg.address, $scope.reg.name, $scope.reg, $scope.reg.status, function(error, txHash) {
+            if(error) {
+                // notify UI of Error
+                $scope.reg.error = 'Error:'+error;
+            } else {
+                // clear form
+                $scope.reg = {};
+                $scope.reg.tx = txHash;
+            }
+        });
     };
+
     $scope.testWeb3 = function() {
         var message = '';
         if(!web3.isConnected()) {
@@ -70,7 +103,7 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
             message += 'Default Acct: ' + web3.eth.defaultAccount;
 
             web3.eth.getMining(function (error, result) {
-               console.log('Is Mining: ' + result);
+                console.log('Is Mining: ' + result);
             });
             web3.eth.getAccounts(function (err, accounts) {
                 web3.eth.getBalance(accounts[0], function (err, balance) {
@@ -112,8 +145,106 @@ app.controller('mainController', ['$scope', '$http', '$location', '$window', 're
         }
         win.alert(message);
     };
-    console.log('mainController initialized.');
+
+    console.log('registerController exited.');
 }]);
+
+app.controller('registryController', ['$scope', '$http', '$location', '$window', 'regService', function ($scope, $http, $location, win, regService) {
+    console.log('entering registryController...');
+
+    var start = 0; // $http.get('start');
+    var size = 10; // $http.get('size');
+    var filter = 'vf'; // $http.get('filter');
+    var sortBy = ''; // $http.get('sortBy');
+    var order = ''; // $http.get('order');
+
+    $scope.entries = [];
+
+    $scope.networkURL = "";
+    web3.version.getNetwork(function (err, netId) {
+        switch (netId) {
+            case "1":
+                $scope.networkURL = "https://etherscan.io/address/";break;
+            case "2":
+                console.log('deprecated Morden test network');break;
+            case "3":
+                $scope.networkURL = "https://ropsten.etherscan.io/address/";break;
+            case "4":
+                $scope.networkURL = "https://rinkeby.etherscan.io/address/";break;
+            case "42":
+                $scope.networkURL = "https://kovan.etherscan.io/address/";break;
+            default:
+                $scope.networkURL = "https://etherscan.io/address/";
+        }
+    });
+
+    //function onError(e) {
+    //    console.log('web:error:'+e);
+    //}
+
+    //function onSuccess(r) {
+    //    console.log('web:results: '+r);
+    //    if(r !== null) {
+    //        // iterate of args
+    //        //var list = [];
+    //        for(var i = 0, len = r.length; i < len; i++) {
+    //        //for(var i = 0, len = 5; i < len; i++) {
+    //            console.log('info='+web3.toAscii(r[i].args.info));
+    //            $scope.entries[i] = {
+    //                name: web3.toAscii(r[i].args.name),
+    //                address: r[i].args.address,
+    //                status: web3.toAscii(r[i].args.status),
+    //                rating: 'A',
+    //                siteURL: 'https://here.com',
+    //                whitepaperURL: 'https://there.com',
+    //                sourcecodeURL: 'https://nowhere.com',
+    //                icoURL: 'https://everywhere.com',
+    //                message: 'bigmessagetome'
+    //            }
+    //        }
+    //        console.log('entries onSuccess: '+$scope.entries);
+    //        $scope.$apply();
+    //    }
+    //}
+
+    console.log('calling regService.loadEntries(start, size, filter, sortBy, order, function(error, entries)');
+    regService.loadEntries(start, size, filter, sortBy, order, function(e, r) {
+        if(e) {
+            console.log('web:error:'+e);
+            throw e;
+        } else {
+            console.log('web:results: '+r);
+            if(r !== null) {
+                // iterate of args
+                //var list = [];
+                for(var i = 0, len = r.length; i < len; i++) {
+                    //for(var i = 0, len = 5; i < len; i++) {
+                    console.log('info='+web3.toAscii(r[i].args.info));
+                    $scope.entries[i] = {
+                        name: web3.toAscii(r[i].args.name),
+                        address: r[i].args.address,
+                        status: web3.toAscii(r[i].args.status),
+                        rating: 'A',
+                        siteURL: 'https://here.com',
+                        whitepaperURL: 'https://there.com',
+                        sourcecodeURL: 'https://nowhere.com',
+                        icoURL: 'https://everywhere.com',
+                        message: 'bigmessagetome'
+                    }
+                }
+                console.log('entries onSuccess: '+$scope.entries);
+                $scope.$apply();
+            }
+        }
+    });
+
+    console.log('entries on exit: '+$scope.entries);
+    console.log('registryController exited.');
+}]);
+
+// directives
+
+// filters
 
 // services
 app.service('regService', function () {
@@ -128,6 +259,7 @@ app.service('regService', function () {
         //web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
     }
+    console.log('web3 version: '+web3.version.api);
     web3.eth.defaultAccount = web3.eth.accounts[0];
     var accountInterval = setInterval(function () {
         if (web3.eth.accounts[0] !== web3.eth.defaultAccount) {
@@ -136,7 +268,8 @@ app.service('regService', function () {
         }
     }, 100);
 
-    var regContractAddress = '0x1b7569f94a4fba9ec9aab7d49ad2ef0beba669aa';
+    //var regContractAddress = '0x1b7569f94a4fba9ec9aab7d49ad2ef0beba669aa';
+    var regContractAddress = '0x08aa91cd234305Ed7a22f2844391D85dEcA46abE';
     var RegistryContract = web3.eth.contract([
         {
             "constant": false,
@@ -198,6 +331,24 @@ app.service('regService', function () {
             "type": "function"
         },
         {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_entry",
+                    "type": "address"
+                },
+                {
+                    "name": "_status",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "setStatus",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "constant": true,
             "inputs": [
                 {
@@ -210,6 +361,10 @@ app.service('regService', function () {
                 {
                     "name": "",
                     "type": "address"
+                },
+                {
+                    "name": "",
+                    "type": "bytes32"
                 },
                 {
                     "name": "",
@@ -291,6 +446,10 @@ app.service('regService', function () {
                 {
                     "name": "info",
                     "type": "bytes32"
+                },
+                {
+                    "name": "status",
+                    "type": "bytes32"
                 }
             ],
             "payable": false,
@@ -324,6 +483,10 @@ app.service('regService', function () {
                 },
                 {
                     "name": "_info",
+                    "type": "bytes32"
+                },
+                {
+                    "name": "_status",
                     "type": "bytes32"
                 }
             ],
@@ -360,6 +523,11 @@ app.service('regService', function () {
                 {
                     "indexed": false,
                     "name": "info",
+                    "type": "bytes32"
+                },
+                {
+                    "indexed": true,
+                    "name": "status",
                     "type": "bytes32"
                 },
                 {
@@ -441,6 +609,28 @@ app.service('regService', function () {
             "anonymous": false,
             "inputs": [
                 {
+                    "indexed": true,
+                    "name": "entryAddress",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "status",
+                    "type": "bytes32"
+                },
+                {
+                    "indexed": true,
+                    "name": "owner",
+                    "type": "address"
+                }
+            ],
+            "name": "UpdatedStatus",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
                     "indexed": false,
                     "name": "newFee",
                     "type": "uint256"
@@ -493,7 +683,8 @@ app.service('regService', function () {
     //registry.defaults({
     //    gasLimit: 100000
     //});
-    console.log('registry: '+registry);
+    //console.log('registry: '+registry);
+    var results = [];
 
     /**
      * Get Entry
@@ -512,20 +703,26 @@ app.service('regService', function () {
      * function register(address _entry, bytes32 _name, bytes32 _info) mustPayFee public payable;
      *
      */
-    this.register = function (entryAddress, name, info) {
-        console.log('calling regService.register(entryAddress, name, info)');
+    this.register = function (entryAddress, name, info, status) {
+        console.log('calling regService.feeInWei()');
         registry.feeInWei(function(error, fee) {
             if(error) {
                 console.log(error);
+                throw error;
             } else {
-                registry.register(entryAddress, web3.toHex(name), web3.toHex(info), {
+                console.log('fee in Wei:'+fee);
+                console.log('calling regService.register(entryAddress, name, info, status)');
+                registry.register(entryAddress, web3.toHex(name), web3.toHex(info), web3.toHex(status), {
                     gas: 150000,
                     value: fee
                 }, function (error, txHash) {
-                    if (error)
+                    if (error) {
                         console.log(error);
-                    else
+                        throw error;
+                    } else {
                         console.log(txHash);
+                        return txHash;
+                    }
                 });
             }
         });
@@ -554,6 +751,17 @@ app.service('regService', function () {
     };
 
     /**
+     * Set Status
+     *
+     * function setStatus(address _entry, bytes32 _status) onlyEntryOwner(_entry) public;
+     *
+     */
+    this.setStatus = function (entryAddress, newStatus) {
+        console.log('calling regService.setInfo(entryAddress, newStatus)');
+        registry.setStatus(entryAddress, web3.toHex(newStatus));
+    };
+
+    /**
      * Transfer Entry Ownership
      *
      * transferEntryOwnership(address _entry, address _newOwner) onlyEntryOwner(_entry) public;
@@ -564,13 +772,22 @@ app.service('regService', function () {
         registry.transferOwnership(entryAddress, newOwnerAddress);
     };
 
+    /**
+     * Build entries list based on start index inclusive to start + size inclusive, e.g. 10, 3 = 10, 11, 12
+     * @param begin
+     * @param size
+     * @param filter
+     * @param sortBy
+     * @param order
+     */
+    this.loadEntries = function(begin, size, filter, sortBy, order, cb){
+        console.log('calling registry.allEvents()');
+        registry.allEvents({fromBlock: 0, toBlock: 'latest'}).get(cb);
+    };
+
     console.log('regService initialized.');
 
 });
-
-// filters
-
-// directives
 
 function init() {
 
